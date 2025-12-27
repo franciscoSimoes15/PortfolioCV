@@ -158,8 +158,7 @@ const ContributionGraph = () => (
     <h3 className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
       <Github className="w-4 h-4" /> Activity Graph (Mock)
     </h3>
-    {/* FIX: Removed max-width restriction to let it fill the sidebar naturally */}
-    <div className="flex flex-wrap gap-1 w-full">
+    <div className="flex flex-wrap gap-1 w-full max-w-[18rem]">
       {Array.from({ length: 140 }).map((_, i) => <div key={i} className={`w-2 h-2 rounded-sm ${Math.random() > 0.5 ? 'bg-green-600' : 'bg-slate-800'}`} />)}
     </div>
   </div>
@@ -268,13 +267,12 @@ export default function App() {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-300 ${isDark ? 'dark' : ''}`}>
       
-      {/* Background Pattern */}
-      {/* FIX: Changed backgroundSize from '40px' to '2.5rem' so it scales with the rest of the site on 5K screens */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05] z-0" 
            style={{ backgroundImage: 'linear-gradient(#6366f1 1px, transparent 1px), linear-gradient(90deg, #6366f1 1px, transparent 1px)', backgroundSize: '2.5rem 2.5rem' }}>
       </div>
 
       <button onClick={() => setIsDark(!isDark)} className="fixed top-6 right-6 p-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 z-50 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+        {/* FIX: Scalable Icons */}
         {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
 
@@ -285,7 +283,6 @@ export default function App() {
         <aside className="w-full md:w-[30%] lg:w-[25vw] shrink-0 bg-slate-900 text-white p-8 md:p-10 flex flex-col border-r border-slate-800 md:h-screen md:sticky md:top-0 overflow-y-auto">
             <div className="relative z-10 text-center md:text-left h-full flex flex-col">
                 
-                {/* FIX: Added 'shrink-0' to prevent the Profile Picture from being squished into an oval on some aspect ratios */}
                 <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 mx-auto md:mx-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-4xl font-bold mb-6 shadow-xl border-4 border-slate-800 ring-4 ring-indigo-500/30">
                     {data.profile.name.charAt(0)}
                 </div>
@@ -294,6 +291,7 @@ export default function App() {
                 <div className="text-indigo-400 font-mono text-sm mb-8 h-10"><Typewriter text={"> " + data.profile.role} delay={40} /></div>
                 
                 <div className="space-y-4 mb-10 text-sm">
+                    {/* FIX: Scalable Sidebar Icons */}
                     <a href={`mailto:${data.profile.email}`} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group justify-center md:justify-start">
                         <Mail className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" /><span>{data.profile.email}</span>
                     </a>
@@ -314,6 +312,7 @@ export default function App() {
             <div className="w-full space-y-12">
                 <section>
                     <div className="flex items-center gap-3 mb-4">
+                        {/* FIX: Scalable Icons */}
                         <Terminal className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Profile.go</h2>
                     </div>
@@ -351,7 +350,11 @@ export default function App() {
                         <Code className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Academic Projects</h2>
                     </div>
-                    <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 min-[2500px]:grid-cols-4 gap-6">
+                    
+                    {/* GRID FIX: Removed the '2xl:grid-cols-3' and 'min-[2500px]:grid-cols-4' 
+                        This locks the layout to 2 columns on all desktop screens, maintaining the wide aspect ratio of cards 
+                        and preventing the text from wrapping excessively. */}
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         {data.projects.map((proj, idx) => (
                             <div key={idx} className="group bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 relative overflow-hidden flex flex-col h-full">
                                 <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>

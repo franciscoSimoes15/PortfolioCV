@@ -26,7 +26,6 @@ a:hover {
   color: #535bf2;
 }
 
-/* --- FULL WIDTH BODY --- */
 body {
   margin: 0;
   min-width: 320px;
@@ -77,31 +76,17 @@ button:focus-visible {
   }
 }
 
-/* --- SCALING FIX --- */
-/* This curve ensures text scales proportionally with the view */
+/* --- FLUID SCALING FIX --- */
+/* Instead of steps (18px, 22px...), we use 'vw' units.
+   This ensures the layout looks exactly the same ratio at 100%, 50%, or 25% zoom. */
 
-@media (min-width: 1600px) {
+@media (min-width: 1280px) {
   html {
-    font-size: 18px; 
-  }
-}
-
-@media (min-width: 2200px) {
-  html {
-    font-size: 22px; 
-  }
-}
-
-/* Target 50% Zoom */
-@media (min-width: 3000px) {
-  html {
-    font-size: 36px; 
-  }
-}
-
-/* Target 25% Zoom */
-@media (min-width: 6000px) {
-  html {
-    font-size: 70px; /* Aggressive scaling to match proportions */
+    /* 0.95% of viewport width. 
+       At 1920px -> ~18px
+       At 2560px (Laptop) -> ~24px
+       At 7680px (25% zoom) -> ~73px 
+       This keeps everything perfectly proportional. */
+    font-size: 0.95vw; 
   }
 }
