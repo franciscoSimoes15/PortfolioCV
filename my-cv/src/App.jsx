@@ -187,13 +187,16 @@ const ChatWidget = ({ resumeData }) => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(!isOpen)} className="fixed bottom-6 right-6 p-4 rounded-full bg-indigo-600 text-white shadow-xl z-50 hover:bg-indigo-700 transition-all hover:scale-110">
+      <button onClick={() => setIsOpen(!isOpen)} className="fixed bottom-6 right-6 p-4 rounded-full bg-indigo-600 text-white shadow-xl z-[60] hover:bg-indigo-700 transition-all hover:scale-110">
         {isOpen ? <X className="w-6 h-6" /> : <Bot className="w-6 h-6" />}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 md:w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 border border-slate-200 dark:border-slate-700 z-50 overflow-hidden flex flex-col max-h-[500px]">
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white -m-4 mb-4">
+        // FIX: Added max-h-[80vh] to stop it from going off-screen on high zoom
+        // FIX: Added 'overflow-hidden' to ensure inner scrollbars work
+        // FIX: Adjusted bottom position to be safe
+        <div className="fixed bottom-24 right-6 w-80 md:w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 border border-slate-200 dark:border-slate-700 z-50 overflow-hidden flex flex-col max-h-[80vh] transition-all duration-300">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white -m-4 mb-4 shrink-0">
             <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-5 h-5" />
                 <span className="font-bold">Project Guide</span>
@@ -205,8 +208,8 @@ const ChatWidget = ({ resumeData }) => {
           </div>
 
           {activeTab === 'chat' && (
-            <>
-              <div className="flex-1 overflow-y-auto space-y-4 min-h-[250px] mb-4">
+            <div className="flex flex-col flex-1 min-h-0">
+              <div className="flex-1 overflow-y-auto space-y-4 mb-4 p-1">
                 {messages.map((m, i) => (
                   <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-100 dark:bg-slate-700 dark:text-white rounded-tl-none'}`}>{m.text}</div>
@@ -215,15 +218,15 @@ const ChatWidget = ({ resumeData }) => {
                 {loading && <Loader className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400 ml-4" />}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 shrink-0">
                 <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSendChat()} className="flex-1 bg-slate-100 dark:bg-slate-900 rounded-full px-3 py-2 text-sm dark:text-white border-none outline-none" placeholder="Type..." />
                 <button onClick={handleSendChat} disabled={loading || !input.trim()} className="p-2 bg-indigo-600 text-white rounded-full"><Send className="w-4 h-4" /></button>
               </div>
-            </>
+            </div>
           )}
 
           {activeTab === 'contact' && (
-            <div className="space-y-3 min-h-[300px]">
+            <div className="flex-col flex-1 min-h-0 overflow-y-auto space-y-3 p-1">
                <div className="text-center mb-4 mt-2">
                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-2">
                    <Mail className="w-6 h-6" />
@@ -272,7 +275,6 @@ export default function App() {
       </div>
 
       <button onClick={() => setIsDark(!isDark)} className="fixed top-6 right-6 p-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 z-50 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
-        {/* FIX: Scalable Icons */}
         {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
 
@@ -291,7 +293,6 @@ export default function App() {
                 <div className="text-indigo-400 font-mono text-sm mb-8 h-10"><Typewriter text={"> " + data.profile.role} delay={40} /></div>
                 
                 <div className="space-y-4 mb-10 text-sm">
-                    {/* FIX: Scalable Sidebar Icons */}
                     <a href={`mailto:${data.profile.email}`} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group justify-center md:justify-start">
                         <Mail className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" /><span>{data.profile.email}</span>
                     </a>
@@ -312,7 +313,6 @@ export default function App() {
             <div className="w-full space-y-12">
                 <section>
                     <div className="flex items-center gap-3 mb-4">
-                        {/* FIX: Scalable Icons */}
                         <Terminal className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Profile.go</h2>
                     </div>
@@ -350,10 +350,6 @@ export default function App() {
                         <Code className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Academic Projects</h2>
                     </div>
-                    
-                    {/* GRID FIX: Removed the '2xl:grid-cols-3' and 'min-[2500px]:grid-cols-4' 
-                        This locks the layout to 2 columns on all desktop screens, maintaining the wide aspect ratio of cards 
-                        and preventing the text from wrapping excessively. */}
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         {data.projects.map((proj, idx) => (
                             <div key={idx} className="group bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 relative overflow-hidden flex flex-col h-full">
